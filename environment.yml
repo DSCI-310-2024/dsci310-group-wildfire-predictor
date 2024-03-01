@@ -1,4 +1,4 @@
-name: base
+name: forestFireEnv
 channels:
   - conda-forge
   - defaults
