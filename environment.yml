@@ -3,19 +3,20 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.11
-  - conda==24.1.2
-  - setuptools
-  - pip
-  - wheel
   - conda-content-trust
   - conda-libmamba-solver
-  - menuinst
-  - python.app
+  - conda==24.1.2
   - jupyterlab
   - jupyterlab-git
   - jupyterlab-spellchecker
+  - menuinst
   - numpy
   - pandas
+  - pip
+  - python.app
+  - python=3.11
   - requests
-prefix: /Applications/miniconda3
+  - setuptools
+  - wheel
+  - matplotlib
+prefix: /Applications/miniconda3/envs/forestFireEnv
