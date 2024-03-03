@@ -19,4 +19,6 @@ dependencies:
   - setuptools
   - wheel
   - matplotlib
+  - seaborn
+  - scikit-learn
 prefix: /Applications/miniconda3/envs/forestFireEnv
