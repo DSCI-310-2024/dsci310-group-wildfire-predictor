@@ -1,6 +1,6 @@
 services:
   analysis-env:
-    image: forest-fire-container:bab3b5d
+    image: brarstar14/forest-fire-container:latest
     ports:
       - "8888:8888"
     volumes:
