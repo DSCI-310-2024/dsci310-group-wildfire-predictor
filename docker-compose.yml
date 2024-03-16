@@ -9,6 +9,6 @@ services:
       resources:
         limits:
           memory: 5G
-    login: ${{ secrets.DOCKER_USERNAME }}
+    username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
     platform: linux/amd64
