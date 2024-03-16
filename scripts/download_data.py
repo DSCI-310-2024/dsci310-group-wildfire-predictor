@@ -52,15 +52,15 @@ def main(url, output_path, csv_file):
             filename = os.path.basename(item)
             if not filename:
                 continue
-            souce = zip_ref.open(item)
+            source = zip_ref.open(item)
             target = open(os.path.join(output_path, filename), "wb")
             with source, target:
-                shutil.copyfileobj(sorce, target)
+                shutil.copyfileobj(source, target)
 
     # Remove zip file after data extracted
     os.remove(output_file_path)    
 
-    click.echo(f"Data successfully downloaded and saved to {zip_file}")
+    click.echo(f"Data successfully downloaded and saved to {output_path}")
 
     # Continue to get_csv if csv_file is given
     if csv_file is not None:
