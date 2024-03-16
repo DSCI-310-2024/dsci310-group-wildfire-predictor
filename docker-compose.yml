@@ -1,0 +1,12 @@
+services:
+  analysis-env:
+    image: forest-fire-container:bab3b5d
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/wildfire
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+    platform: linux/amd64
