@@ -1,6 +1,6 @@
 services:
   analysis-env:
-    image: brarstar14/forestfire:tagname
+    image: brarstar14/forest-fire-container:tagname
     ports:
       - "8888:8888"
     volumes:
