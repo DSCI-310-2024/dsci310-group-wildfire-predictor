@@ -13,10 +13,11 @@ import shutil
 #options
 @click.command()
 @click.option('--raw-data', type = str)
+@click.option('--data-to', type = str)
 
 #main
 
-def main(raw_data):
+def main(raw_data, data_to):
     '''
     Reads in data and preprocesses it to be used in EDA (mainly drops null values).
     Saves the preprocessor to be used in next script.
