@@ -1,6 +1,6 @@
 services:
   analysis-env:
-    image: ttimbers/breast_cancer_predictor_py:d285fc9
+    image: brarstar14/forestfire:tagname
     ports:
       - "8888:8888"
     volumes:

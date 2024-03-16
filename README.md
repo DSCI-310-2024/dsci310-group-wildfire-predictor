@@ -35,7 +35,6 @@ If it is your first time running the project, follow these steps:
 
 5. Under the "Kernel" menu click "Restart Kernel and Run All Cells...". 
 
-    
  <h3> Dependencies </h3>
 
 You will also need need:
@@ -43,6 +42,22 @@ You will also need need:
 * conda (version 24.1.2 or higher)
 * nb_conda_kernels (version 2.3.1 or higher)
 + Python and packages listed in environment.yml
+
+<h3> Docker-Usage </h3>
+If you want to reproduce the analysis using Docker, follow these steps:
+
+1. Install and launch Docker on your Computer, make sure its a Linux/amd64 type.
+2. Clone our Wildfire Github Repository
+<h4>Running our analysis</h4>
+
+1. First make sure to resert the project to a clean state using
+
+        docker-compose run --rm analysis-env make clean
+2. Next, run the entire analysis
+
+        docker-compose run --rm analysis-env make all
+
+
 
 --- 
 
