@@ -16,7 +16,7 @@ all: data/Raw/Nov_10/Historical_Wildfires.csv\
 #Download Data
 data/Raw/Nov_10/Historical_Wildfires.csv: scripts/download_data.py
 	python scripts/download_data.py \
-		--url = #UPDATE \
+		--url = https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip \
 		--output-path = data/Raw/Nov_10\
 		--csv_file = Historical_Wildfires.csv\
 
