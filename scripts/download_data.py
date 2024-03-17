@@ -52,7 +52,7 @@ def main(url, output_path, csv_file):
             filename = os.path.basename(item)
             if not filename:
                 continue
-            souce = zip_ref.open(item)
+            source = zip_ref.open(item)
             target = open(os.path.join(output_path, filename), "wb")
             with source, target:
                 shutil.copyfileobj(sorce, target)
