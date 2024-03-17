@@ -25,12 +25,12 @@ data/Processed Data/Historical_Wildfires.csv: scripts/preprocessing.py data/Raw/
 	python scripts/preprocessing.py \
 		--raw-data=data/Raw/Nov_10/Historical_Wildfires.csv \
 
-#perform EDA and save plots
-
+# Perform EDA and save plots
 src/figures/correlation_matrix.png src/figures/barplot_fires_by_region.png src/figures/histogram_fire_area.png: scripts/eda_visualization.py data/Processed Data/Historical_Wildfires.csv
-	python scripts/eda_visualization.py\
-		--preprocessed-data=data/Processed Data/Historical_Wildfires.csv\
+	python scripts/eda_visualization.py \
+		--preprocessed-data=data/Processed\ Data/Historical_Wildfires.csv \
 		--plot-to=src/figures \
+
 
 #Perform analysis and save resulting figures
 
