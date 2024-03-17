@@ -23,21 +23,21 @@ data/Raw/Nov_10/Historical_Wildfires.csv: scripts/download_data.py
 #Preprocessing data for use
 data/Processed Data/Historical_Wildfires.csv: scripts/preprocessing.py data/Raw/Nov_10/Historical_Wildfires.csv
 	python scripts/preprocessing.py \
-		--raw-data= data/Raw/Nov_10/Historical_Wildfires.csv \
+		--raw-data=data/Raw/Nov_10/Historical_Wildfires.csv \
 
 #perform EDA and save plots
 
 src/figures/correlation_matrix.png src/figures/barplot_fires_by_region.png src/figures/histogram_fire_area.png: scripts/eda_visualization.py data/Processed Data/Historical_Wildfires.csv
 	python scripts/eda_visualization.py\
-		--preprocessed-data= data/Processed Data/Historical_Wildfires.csv\
-		--plot-to= src/figures \
+		--preprocessed-data=data/Processed Data/Historical_Wildfires.csv\
+		--plot-to=src/figures \
 
 #Perform analysis and save resulting figures
 
 src/figures/predicted_vs_actual.png src/figures/line_plot.png src/figures/residual_plot.png: scripts/regression_model.py data/Processed Data/Historical_Wildfires.csv
 	python scripts/regression_model.py \
-		--preprocessed-data= data/Processed Data/Historical_Wildfires.csv \
-		--results-to= src/figures \
+		--preprocessed-data= ata/Processed Data/Historical_Wildfires.csv \
+		--results-to=src/figures \
 
 #Clean all the targets created above
 clean:
