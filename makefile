@@ -1,6 +1,5 @@
-#Date: 2024-03-25
-#Author: Fiona Chang
-
+# Date: 2024-03-25
+# Author: Fiona Chang
 
 # All will create each of the targets below
 all: data/Raw/Nov_10/Historical_Wildfires.csv \
