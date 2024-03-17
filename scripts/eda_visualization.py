@@ -11,7 +11,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 
 @click.command()
-@click.option('--preprocessed-data', type=str, help='Path to the processed data file')
+@click.option('--preprocessed-data', type=str, help='Path to the preprocessed data CSV file')
 @click.option('--plot-to', type=str, help='Path to the output directory for saving visualizations')
 def main(preprocessed_data, plot_to):
     '''Plot features for Exploratory Data Analysis and save visualizations'''
