@@ -60,7 +60,7 @@ def main(url, output_path, csv_file):
     # Remove zip file after data extracted
     os.remove(output_file_path)    
 
-    click.echo(f"Data successfully downloaded and saved to {zip_file}")
+    click.echo(f"Data successfully downloaded and saved to {zipfile}")
 
     # Continue to get_csv if csv_file is given
     if csv_file is not None:
