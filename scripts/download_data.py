@@ -55,7 +55,7 @@ def main(url, output_path, csv_file):
             source = zip_ref.open(item)
             target = open(os.path.join(output_path, filename), "wb")
             with source, target:
-                shutil.copyfileobj(sorce, target)
+                shutil.copyfileobj(source, target)
 
     # Remove zip file after data extracted
     os.remove(output_file_path)    
