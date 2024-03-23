@@ -69,22 +69,22 @@ The data was spatially averaged to the following 7 regions in Australia:
 - Vl: Victoria
 - WA: Western Australia
 
-![Histogram of Fire Area](../src/figures/histogram_fire_area.png)
+![Histogram of Fire Area](../src/figures/histogram_fire_area.png){#fig-fire-area-hist}
 
 
-![Barplot of Fires by Region](../src/figures/barplot_fires_by_region.png)
+![Barplot of Fires by Region](../src/figures/barplot_fires_by_region.png){#fig-fire-region-bar}
 
 ## Analysis
 
 A linear regression model was trained to predict the intensity of forest fires in Australia, measured by estimated total fire area (the column estimated_fire_area), using the variables count, mean confidence, Mean estimated fire brightness, and mean estimated fire radiative power. We opted to use a linear regression model due to its interpretability and the continuous nature of our target variable. Prior to fitting the model, the numeric variables were isolated and standardized so that the coefficients we obtained would not be influenced by scale differences in the variables. Only four of the eight potential predictor variables were used to train the model: non-numeric variables were eliminated, and then a correlation analysis was performed to identify which features present in the remaining data would be good predictors of the target variable. The data was divided into training and test sets using an 80/20 split. The model was first trained on the training data, and then used to make predictions on the test set. This analysis was performed using the Python Programming Language [@Python] and the following Python packages: requests [@requests], zipfile [@zipfile], numpy [@harris2020], Pandas [@pandas], matplotlib [@hunter2007], scikit-learn [@scikitlearn], and seaborn [@seaborn].
 
-![Correlation Matrix](../src/figures/correlation_matrix.png)
+![Correlation Matrix](../src/figures/correlation_matrix.png){#fig-corr-matrix}
 
-![Predicted versus Actual](../src/figures/predicted_vs_actual.png)
+![Predicted versus Actual](../src/figures/predicted_vs_actual.png){#fig-pred-vs-actual}
 
-![Residual Plot](../src/figures/residual_plot.png)
+![Residual Plot](../src/figures/residual_plot.png){#fig-resid-plot}
 
-![Line Plot](../src/figures/line_plot.png\)
+![Line Plot](../src/figures/line_plot.png){#fig-line-plot}
 
 
 # Results & Discussion
