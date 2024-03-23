@@ -2,48 +2,43 @@
 #Author: Fiona Chang
 
 
-#All will create each of the targets below
-all: data/Raw/Nov_10/Historical_Wildfires.csv\
-	data/Processed Data/Historical_Wildfires.csv\
-	src/figures/correlation_matrix.png\
-	src/figures/barplot_fires_by_region.png\
-	src/figures/histogram_fire_area.png\
-	src/figures/predicted_vs_actual.png\
-	src/figures/line_plot.png\
-	src/figures/residual_plot.png
+# All will create each of the targets below
+all: data/Raw/Nov_10/Historical_Wildfires.csv \
+     data/Processed\ Data/Historical_Wildfires.csv \
+     src/figures/correlation_matrix.png \
+     src/figures/barplot_fires_by_region.png \
+     src/figures/histogram_fire_area.png \
+     src/figures/predicted_vs_actual.png \
+     src/figures/line_plot.png \
+     src/figures/residual_plot.png
 
 
-#Download Data
+# Download Data
 data/Raw/Nov_10/Historical_Wildfires.csv: scripts/download_data.py
 	python scripts/download_data.py \
-		--url = https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip \
-		--output-path = data/Raw/Nov_10\
-		--csv_file = Historical_Wildfires.csv\
+		--url=https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip \
+		--output_path=data/Raw/Nov_10 \
+		--csv_file=Historical_Wildfires.csv
 
-#Preprocessing data for use
-data/Processed Data/Historical_Wildfires.csv: scripts/preprocessing.py data/Raw/Nov_10/Historical_Wildfires.csv
+# Preprocessing data for use
+data/Processed\ Data/Historical_Wildfires.csv: scripts/preprocessing.py data/Raw/Nov_10/Historical_Wildfires.csv
 	python scripts/preprocessing.py \
-		--raw-data= data/Raw/Nov_10/Historical_Wildfires.csv \
+		--raw-data=data/Raw/Nov_10/Historical_Wildfires.csv
 
-#perform EDA and save plots
+# Perform EDA and save plots
+src/figures/correlation_matrix.png src/figures/barplot_fires_by_region.png src/figures/histogram_fire_area.png: scripts/eda_visualization.py data/Processed\ Data/Historical_Wildfires.csv
+	python scripts/eda_visualization.py \
+		--preprocessed-data=data/Processed\ Data/Historical_Wildfires.csv \
+		--plot-to=src/figures
 
-src/figures/correlation_matrix.png src/figures/barplot_fires_by_region.png src/figures/histogram_fire_area.png: scripts/eda_visualization.py data/Processed Data/Historical_Wildfires.csv
-	python scripts/eda_visualization.py\
-		--preprocessed-data= data/Processed Data/Historical_Wildfires.csv\
-		--plot-to= src/figures \
-
-#Perform analysis and save resulting figures
-
-src/figures/predicted_vs_actual.png src/figures/line_plot.png src/figures/residual_plot.png: scripts/regression_model.py data/Processed Data/Historical_Wildfires.csv
+# Perform analysis and save resulting figures
+src/figures/predicted_vs_actual.png src/figures/line_plot.png src/figures/residual_plot.png: scripts/regression_model.py data/Processed\ Data/Historical_Wildfires.csv
 	python scripts/regression_model.py \
-		--preprocessed-data= data/Processed Data/Historical_Wildfires.csv \
-		--results-to= src/figures \
+		--preprocessed-data=data/Processed\ Data/Historical_Wildfires.csv \
+		--results-to=src/figures
 
-#Clean all the targets created above
+# Clean all the targets created above
 clean:
 	rm -f data/Raw/Nov_10/Historical_Wildfires.csv
-	rm -f data/Processed Data/Historical_Wildfires.csv
-	rm -f src/figures
-
-
-
+	rm -f data/Processed\ Data/Historical_Wildfires.csv
+	rm -f src/figures/*
