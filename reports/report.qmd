@@ -30,18 +30,22 @@ from sklearn.preprocessing import StandardScaler
 ```
 
 # Summary
+
 This study employing a linear regression model to predict wildfire intensity in Australian regions aims to draw parallels with British Columbia's escalating wildfire risk due to climate-related weather. Using a dataset encompassing fire-related variables since 2005, including fire area, brightness, and radiative power, the analysis reveals a strong positive correlation between fire area and mean radiative power. The model demonstrates good fit and offers potential applications in wildfire management and prediction.
 
 # Introduction
-British Columbia is well-known for having a moderate climate associated with its beautiful, temperate rainforests; but in recent years, climate-related weather extremes in the region have caused a significant increase in forest fires [@dellaSala2011, @parisien2023]. The rapid onset of the problem, in conjunction with its unprecedented magnitude, has left British Columbians vulnerable as provincial authorities struggle to develop infrastructure capable of addressing the frequency and severity of the fires [@parisien2023]. While inland residents face a heightened risk of losing their lives, homes, and loved ones to wildfires, the resulting smoke influences air quality throughout the province, posing profound health risks [cascio2018].
 
-While rates of climate-related fire events are projected to increase globally, due to the composition of its ecological landscape, Australia is a nation that is well accustomed to battling wildfires [@jones2022, @bowman2018]. There is notable overlap between the terrestrial biomes present in both Australia and B.C., particularly in the unique temperate coastal regions steeped with flammable vegetation, and the semi-arid inland deserts [@dickman2018, @bowman2018]. Given its proximity to the equator, Australia’s North coast exhibits fewer similarities to B.C [@dickman2018, @dellaSala2011]. However, a shift in the B.C. climate precipitated by rising temperatures is occurring; some of the drier inland areas are beginning to mimic the ecological conditions found on Australia’s North coast.
+British Columbia is well-known for having a moderate climate associated with its beautiful, temperate rainforests; but in recent years, climate-related weather extremes in the region have caused a significant increase in forest fires [@dellaSala2011; @parisien2023]. The rapid onset of the problem, in conjunction with its unprecedented magnitude, has left British Columbians vulnerable as provincial authorities struggle to develop infrastructure capable of addressing the frequency and severity of the fires [@parisien2023]. While inland residents face a heightened risk of losing their lives, homes, and loved ones to wildfires, the resulting smoke influences air quality throughout the province, posing profound health risks [@cascio2018].
 
-Here, we attempt to predict the intensity of wildfires in regions across Australia that exhibit ecological similarities to B.C. in the hopes that the model can be adapted for provincial use. The four highest temperatures over the last century in B.C. have all been recorded within the last seven years; the swiftness with which the local climate is changing has caused a scarcity of regional data to anticipate the state of future wildfire seasons [@parisien2023]. We will be using a [dataset](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip) processed by IBM containing information collected via thermal imaging technology since 2005, which captures a number of variables such as region, daily sum of estimated fire area, brightness, and radiative power [@hamann2021, @krook2021]. For the purposes of this analysis, fire intensity will be represented by estimated daily regional area affected by fire. The rarity of the terrestrial biomes shared by both regions, coupled with Australia’s experience in wildfire management, present B.C. with an unlikely learning opportunity: it is possible that the wealth of historical data on Australian wildfires could be used to help B.C. predict forest fire intensity [@bowman2018, @dellaSala2011]. A sentiment that has been shared among Canadian researchers is that the abilities of machine learning tools are not taken advantage of by the Canadian Wildland Fire Information System [@purcell2023]. Current wildfire research efforts should be supplemented by modern technological methods; hopefully, they can be used to preempt the trajectory of wildfire prevalence, and make life-saving modifications to infrastructure. 
+While rates of climate-related fire events are projected to increase globally, due to the composition of its ecological landscape, Australia is a nation that is well accustomed to battling wildfires [@jones2022; @bowman2018]. There is notable overlap between the terrestrial biomes present in both Australia and B.C., particularly in the unique temperate coastal regions steeped with flammable vegetation, and the semi-arid inland deserts [@dickman2018; @bowman2018]. Given its proximity to the equator, Australia’s North coast exhibits fewer similarities to B.C [@dickman2018; @dellaSala2011]. However, a shift in the B.C. climate precipitated by rising temperatures is occurring; some of the drier inland areas are beginning to mimic the ecological conditions found on Australia’s North coast.
+
+Here, we attempt to predict the intensity of wildfires in regions across Australia that exhibit ecological similarities to B.C. in the hopes that the model can be adapted for provincial use. The four highest temperatures over the last century in B.C. have all been recorded within the last seven years; the swiftness with which the local climate is changing has caused a scarcity of regional data to anticipate the state of future wildfire seasons [@parisien2023]. We will be using a [dataset](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip) processed by IBM containing information collected via thermal imaging technology since 2005, which captures a number of variables such as region, daily sum of estimated fire area, brightness, and radiative power [@hamann2021; @krook2021]. For the purposes of this analysis, fire intensity will be represented by estimated daily regional area affected by fire. The rarity of the terrestrial biomes shared by both regions, coupled with Australia’s experience in wildfire management, present B.C. with an unlikely learning opportunity: it is possible that the wealth of historical data on Australian wildfires could be used to help B.C. predict forest fire intensity [@bowman2018; @dellaSala2011]. A sentiment that has been shared among Canadian researchers is that the abilities of machine learning tools are not taken advantage of by the Canadian Wildland Fire Information System [@purcell2023]. Current wildfire research efforts should be supplemented by modern technological methods; hopefully, they can be used to preempt the trajectory of wildfire prevalence, and make life-saving modifications to infrastructure. 
 
 # Methods
+
 ## Data 
-Our dataset contains information about wildfires throughout seven geographic regions in Australia, starting from the year 2005. It can be located in its entirety [on GitHub](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main), and [this](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/blob/main/data/misc/NSW_Wildfires_Temperature.csv) is the specific csv containing the data used for our analysis [@hamann2021, @krook2021].
+
+Our dataset contains information about wildfires throughout seven geographic regions in Australia, starting from the year 2005. It can be located in its entirety [on GitHub](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main), and [this](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/blob/main/data/misc/NSW_Wildfires_Temperature.csv) is the specific csv containing the data used for our analysis [@hamann2021; @krook2021].
 
 There are 26,404 rows and 9 columns. Definitions for each variable, obtained from the [original data documentation](https://github.com/Call-for-Code/Spot-Challenge-Wildfires/blob/main/data/Readme_Docs_Wildfires-Datasets_2020-11.pdf), are provided below.
 
@@ -65,24 +69,26 @@ The data was spatially averaged to the following 7 regions in Australia:
 - Vl: Victoria
 - WA: Western Australia
 
-![Histogram of Fire Area](src/figures/histogram_fire_area.png)
+![Histogram of Fire Area](../src/figures/histogram_fire_area.png){#fig-fire-area-hist}
 
 
-![Barplot of Fires by Region](src/figures/barplot_fires_by_region.png)
+![Barplot of Fires by Region](../src/figures/barplot_fires_by_region.png){#fig-fire-region-bar}
 
 ## Analysis
+
 A linear regression model was trained to predict the intensity of forest fires in Australia, measured by estimated total fire area (the column estimated_fire_area), using the variables count, mean confidence, Mean estimated fire brightness, and mean estimated fire radiative power. We opted to use a linear regression model due to its interpretability and the continuous nature of our target variable. Prior to fitting the model, the numeric variables were isolated and standardized so that the coefficients we obtained would not be influenced by scale differences in the variables. Only four of the eight potential predictor variables were used to train the model: non-numeric variables were eliminated, and then a correlation analysis was performed to identify which features present in the remaining data would be good predictors of the target variable. The data was divided into training and test sets using an 80/20 split. The model was first trained on the training data, and then used to make predictions on the test set. This analysis was performed using the Python Programming Language [@Python] and the following Python packages: requests [@requests], zipfile [@zipfile], numpy [@harris2020], Pandas [@pandas], matplotlib [@hunter2007], scikit-learn [@scikitlearn], and seaborn [@seaborn].
 
-![Correlation Matrix](src/figures/correlation_matrix.png)
+![Correlation Matrix](../src/figures/correlation_matrix.png){#fig-corr-matrix}
 
-![Predicted versus Actual](src/figures/predicted_vs_actual.png)
+![Predicted versus Actual](../src/figures/predicted_vs_actual.png){#fig-pred-vs-actual}
 
-![Residual Plot](src/figures/residual_plot.png)
+![Residual Plot](../src/figures/residual_plot.png){#fig-resid-plot}
 
-![Line Plot](src/figures/line_plot.png\)
+![Line Plot](../src/figures/line_plot.png){#fig-line-plot}
 
 
 # Results & Discussion
+
 Good model fit was indicated by the evaluation metrics we selected, RMSE (72.95) and R-squared (0.9476). A strong positive linear relationship between the target variable and the predictors Count and Mean_estimated_fire_radiative_power can be observed in the line and residual plots accompanying the analysis. The predictors Mean_estimated_fire_brightness and Mean_confidence have negative coefficients, indicating a decrease in the value of these features precipitates an increase in the value of the target variable estimated_fire_area.
 
 The findings are consistent with our expectations, as regions with greater radiative power correlate with larger wildfire areas. However, the negative coefficient for mean estimated fire brightness and confidence suggests an inverse relationship, implying that lower brightness and confidence intervals are associated with larger fire areas.
@@ -95,36 +101,3 @@ For future iterations, it's worth considering further exploration of the correla
 
 
 # References
-Bowman, D. M. J. S., Daniels, L. D., Johnston, F. H., Williamson, G. J., Jolly, W. M., Magzamen, S., Rappold, A. G., Bräuer, M., & Henderson, S. B. (2018). Can Air Quality Management Drive Sustainable Fuels Management at the Temperate Wildland–Urban Interface? Fire, 1(2), 27. https://doi.org/10.3390/fire1020027
-
-Cascio, W. E. (2018). Wildland fire smoke and human health. Science of the Total Environment, 624, 586–595. https://doi.org/10.1016/j.scitotenv.2017.12.086
-
-DellaSala, D. A., Alaback, P. B., Spribille, T., Von Wehrden, H., & Nauman, R. S. (2011). Just what are temperate and boreal rainforests? Island Press/Center for Resource Economics eBooks (pp. 1–41). https://doi.org/10.5822/978-1-61091-008-8_1
-
-Dickman, C. R. (2018). Biodiversity in Australia: An Overview: Selected Countries in the Americas and Australia. Global Biodiversity. 10.1201/9780429433634-12
-
-Hamann, H., & Schmude, J. (2021). IBM Developer. https://developer.ibm.com/data/spot-challenge-wildfires/
-
-Harris, C.R. (2020). Array programming with NumPy. Nature, 585, pp.357–362.
-
-Hunter, J. D. (2007). Matplotlib: A 2D Graphics Environment, Computing in Science & Engineering, vol. 9, no. 3, pp. 90-95.
-
-Jones, M. W., Abatzoglou, J. T., Veraverbeke, S., Andela, N., Lasslop, G., Forkel, M., Smith, A. J. P., Burton, C., Betts, R., Van Der Werf, G. R., Sitch, S., Canadell, J. G., Santín, C., Kolden, C. A., Doerr, S. H., & Quéré, C. L. (2022). Global and regional trends and drivers of fire under climate change. Reviews of Geophysics, 60(3). https://doi.org/10.1029/2020rg000726
-
-Krook, D. (2021). Spot Challenge Wildfires. GitHub. https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main
-
-McKinney, W. (2010). “Data Structures for Statistical Computing in Python.” In Proceedings of the 9th Python in Science Conference, edited by Stéfan van der Walt and Jarrod Millman, 51–56.
-
-Parisien, M., Barber, Q. E., Bourbonnais, M. L., Daniels, L. D., Flannigan, M. D., Gray, R. W., Hoffman, K. M., Jain, P., Stephens, S. L., Taylor, S., & Whitman, E. (2023). Abrupt, Climate-induced Increase in Wildfires in British Columbia Since the Mid-2000s. Communications Earth & Environment, 4(1). https://doi.org/10.1038/s43247-023-00977-1
-
-Pedregosa, F. (2011). Scikit-learn: Machine learning in Python. Journal of machine learning research, 12(Oct), pp.2825–2830.
-
-Purcell, R. (2023). Forest Fire Prediction Frameworks using Federated Learning and Internet of Things (IoT) [MSc Thesis, Dalhousie University]. https://dalspace.library.dal.ca/bitstream/handle/10222/82847/RichardJPurcell2023.pdf?sequence=5&isAllowed=y
-
-Python Software Foundation (2022). zipfile -- Work with ZIP archives. Python 3 Documentation. https://docs.python.org/3/library/zipfile.html
-
-Reitz, K. (2011). Requests: HTTP for Humans. https://requests.readthedocs.io/en/master/.
-
-Van Rossum, G. & Drake, F.L. (2009). Python 3 Reference Manual. Scotts Valley, CA: CreateSpace.
-
-Waskom, M. L. (2021). Seaborn: statistical data visualization. Journal of Open Source Software, 6(60), 3021, https://doi.org/10.21105/joss.03021.
