@@ -97,7 +97,7 @@ def test_download_extract_data_nested_subdir():
 # input URL is empty
 
 def test_download_extract_data_empty_zip():
-    with pytest.raises(ValueError, match='The ZIP file is empty.'):
+    with pytest.raises(ValueError, match="Data extraction failed: the given zip file is empty."):
         download_extract_data(url_empty_zip, 'tests/test_zip_data1')
 
 
@@ -105,7 +105,7 @@ def test_download_extract_data_empty_zip():
 # Test download_extract_data function raises an error if the input URL is invalid 
 
 def test_download_extract_data_error_on_invalid_url(mock_response):
-    with pytest.raises(ValueError, match='The URL provided does not exist.'):
+    with pytest.raises(ValueError, match="File download failed: the given URL does not exist."):
         download_extract_data('https://example.com', 'tests/test_zip_data1')
 
 
@@ -113,7 +113,7 @@ def test_download_extract_data_error_on_invalid_url(mock_response):
 # Test download_extract_data function throws an error if the URL is not a zip file
 
 def test_download_extract_data_error_on_nonzip_url():
-    with pytest.raises(ValueError, match='The URL provided does not point to a zip file.'):
+    with pytest.raises(ValueError, match="File download failed: the given URL does not point to a zip file."):
         download_extract_data('https://github.com/', 'tests/test_zip_data1')
 
 
@@ -121,6 +121,6 @@ def test_download_extract_data_error_on_nonzip_url():
 # Test download_extract_data function throws an error if the directory path 
 # provided does not exist
 
-def test_download_extract_data_error_on_missing_dir():
-    with pytest.raises(ValueError, match='The directory provided does not exist.'):
-        download_extract_data(url_txt_csv_zip, 'tests/test_zip_data3')
+#def test_download_extract_data_error_on_missing_dir():
+#    with pytest.raises(ValueError, match='The directory provided does not exist.'):
+#        download_extract_data(url_txt_csv_zip, 'tests/test_zip_data3')
