@@ -119,9 +119,17 @@ def test_download_extract_data_error_on_nonzip_url():
 
 
 # Case 7
-# Test download_extract_data function throws an error if the directory path 
+# Test download_extract_data function creates the directory if the path 
 # provided does not exist
 
-#def test_download_extract_data_error_on_missing_dir():
-#    with pytest.raises(ValueError, match='The directory provided does not exist.'):
-#        download_extract_data(url_txt_csv_zip, 'tests/test_zip_data3')
+def test_download_extract_data_create_dir():
+    output_path = "tests/test_zip_data3"
+    
+    download_extract_data(url_txt_csv_zip, output_path)
+    assert os.path.exists(output_path)
+    # clean up unzipped files
+    for filename in os.listdir(output_path):
+        file_path = os.path.join(output_path, filename)
+        os.remove(file_path)
+
+    os.rmdir(output_path)
