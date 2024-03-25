@@ -23,13 +23,13 @@ test_files_subdir = ['test1.txt', 'test2.csv', 'subdir/test3.txt']
 test_files_2txt_csv = ['test1.txt', 'test2.csv', 'test4.txt']
 
 # URL for Case 1 
-url_txt_csv_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/raw/main/tests/test_files_txt_csv.zip'
+url_txt_csv_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/blob/abstract-download-data-script-to-fxns/tests/test_files_txt_csv.zip'
 
 # URL for Case 2 ('test1.txt', test2.csv and 'subdir/test2.txt')
-url_txt_subdir_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/raw/main/tests/test_files_all.zip'
+url_txt_subdir_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/blob/abstract-download-data-script-to-fxns/tests/test_files_all.zip'
 
 # URL for Case 3 (empty zip file)
-url_empty_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/raw/main/tests/empty.zip'
+url_empty_zip = 'https://github.com/FionaC124/dsci310-group-wildfire-predictor/blob/abstract-download-data-script-to-fxns/tests/empty.zip'
 
 # mock non-existing URL
 @pytest.fixture
