@@ -19,7 +19,7 @@ with open('tests/test_zip_data2/test4.txt', 'w') as file:
     pass  # creates an empty file
 
 test_files_txt_csv = ['test1.txt', 'test2.csv']
-test_files_subdir = ['test1.txt', 'test2.csv', 'test_subdir/test3.txt']
+test_files_subdir = ['test1.txt', 'test2.csv', 'subdir/test3.txt']
 test_files_2txt_csv = ['test1.txt', 'test2.csv', 'test4.txt']
 
 # URL for Case 1 
@@ -67,13 +67,14 @@ def test_download_extract_data_subdir():
     # List of files you expect to find in the directory
     for file in test_files_subdir:
         file_path = os.path.join('tests/test_zip_data1', file)
+        print("Check file path:", file_path) # Print statement
         assert os.path.isfile(file_path)
     # clean up unzipped files
     for file in test_files_subdir:
         if os.path.exists(file):
             os.remove(file)
-    if os.path.exists('tests/test_zip_data1/test_subdir'):
-        shutil.rmtree('tests/test_zip_data1/test_subdir')
+    if os.path.exists('tests/test_zip_data1/subdir'):
+        shutil.rmtree('tests/test_zip_data1/subdir')
 
 
 # Case 3
