@@ -72,8 +72,8 @@ def test_download_extract_data_subdir():
     for file in test_files_subdir:
         if os.path.exists(file):
             os.remove(file)
-    if os.path.exists('testss/test_zip_data1/subdir'):
-        shutil.rmtree('testss/test_zip_data1/subdir')
+    if os.path.exists('tests/test_zip_data1/subdir'):
+        shutil.rmtree('tests/test_zip_data1/subdir')
 
 
 # Case 3
