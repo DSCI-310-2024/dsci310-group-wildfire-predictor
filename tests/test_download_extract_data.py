@@ -19,7 +19,7 @@ with open('tests/test_zip_data2/test4.txt', 'w') as file:
     pass  # creates an empty file
 
 test_files_txt_csv = ['test1.txt', 'test2.csv']
-test_files_subdir = ['test1.txt', 'test2.csv', 'subdir/test3.txt']
+test_files_subdir = ['test1.txt', 'test2.csv', 'test_subdir/test3.txt']
 test_files_2txt_csv = ['test1.txt', 'test2.csv', 'test4.txt']
 
 # URL for Case 1 
