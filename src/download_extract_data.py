@@ -48,15 +48,8 @@ def download_extract_data(url, output_path):
         # Check if the zip file is empty; if yes, raise an error
         if not all_files:
             raise ValueError("Data extraction failed: the given zip file is empty.")
-        
-        for item in all_files:
-            item_filename = os.path.basename(item)
-            if not item_filename:
-                continue
-            source = zip_ref.open(item)
-            target = open(os.path.join(output_path, item_filename), "wb")
-            with source, target:
-                shutil.copyfileobj(source, target)
+
+        zip_ref.extractall(output_path)
 
     # Remove zip file after data extracted
     os.remove(output_file_path)
