@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
+from src.scale_data import scale_numeric_df
 
 @click.command()
 @click.option('--preprocessed-data', type=str, help='Path to the processed data file')
@@ -42,12 +43,8 @@ def main(preprocessed_data, plot_to):
 
     # Correlation analysis
     # Set seed for reproducibility
-    np.random.seed(238)
-    numeric_df = data.select_dtypes(include=['float64', 'int64'])
-    scaler = StandardScaler()
-    scaled_df = scaler.fit_transform(numeric_df)
-    scaled_df = pd.DataFrame(scaled_df, columns=numeric_df.columns)
-    correlation_matrix = numeric_df.corr()
+    scaled_df = scale_numeric_df(data)
+    correlation_matrix = scaled_df.corr()
 
     # Plot correlation matrix
     plt.figure(figsize=(8, 6))
