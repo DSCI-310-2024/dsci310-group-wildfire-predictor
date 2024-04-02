@@ -2,6 +2,7 @@
 # author: Pahul Brar
 # date: 2024-04-1
 import numpy as np
+import pandas as pd
 
 def rmse(observed, predicted):
     # Check for empty inputs
@@ -12,7 +13,7 @@ def rmse(observed, predicted):
     if len(observed) != len(predicted):
         raise ValueError('Inputs must be the same size')
 
-    if isinstance(observed, (list, tuple, np.ndarray)) and isinstance(predicted, (list, tuple, np.ndarray)):
+    if isinstance(observed, (list, tuple, np.ndarray, pd.Series)) and isinstance(predicted, (list, tuple, np.ndarray, pd.Series)):
         # Convert inputs to NumPy arrays
         observed = np.array(observed)
         predicted = np.array(predicted)
@@ -29,5 +30,3 @@ def rmse(observed, predicted):
         return rmse_value
     else:
         raise ValueError("Inputs must be of type list, tuple, or numpy array")
-    
-    #make sure to have strict tests built-in so only the requried elements are allowed.
