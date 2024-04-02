@@ -1,6 +1,8 @@
 # regression_model.py
-# author: Darwin Zhang
+# Milestone 2 author: Darwin Zhang 
 # date: 2024-03-14
+# Milestone 3 author: Pahul Brar
+# date: 2024-04-1
 
 import click
 import os
@@ -11,6 +13,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from src.rmse_fn import rmse
 
 @click.command()
 @click.option('--preprocessed-data', type=str, help='Path to the processed data file')
@@ -38,8 +41,7 @@ def main(preprocessed_data, results_to):
     y_pred = model.predict(X_test)
 
     # Evaluating model 
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
+    rmse = rmse(y_test, y_pred)
     print("RMSE:", rmse)
 
     r_squared = model.score(X_test, y_test)

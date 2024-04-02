@@ -1,3 +1,6 @@
+# rmse_function.py
+# author: Pahul Brar
+# date: 2024-04-1
 import numpy as np
 
 def rmse(observed, predicted):
