@@ -6,6 +6,7 @@
 
 import click
 import os
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,6 +14,9 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 from src.rmse_fn import rmse
 
 @click.command()
@@ -41,8 +45,9 @@ def main(preprocessed_data, results_to):
     y_pred = model.predict(X_test)
 
     # Evaluating model 
-    rmse = rmse(y_test, y_pred)
-    print("RMSE:", rmse)
+    rmse_value = rmse(y_test, y_pred)
+    print("RMSE:", rmse_value)
+
 
     r_squared = model.score(X_test, y_test)
     print("R-squared score:", r_squared)

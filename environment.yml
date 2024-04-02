@@ -21,4 +21,6 @@ dependencies:
   - matplotlib
   - seaborn
   - scikit-learn
+  - pip:
+    - click
 prefix: /Applications/miniconda3/envs/forestFireEnv
