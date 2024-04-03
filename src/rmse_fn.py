@@ -6,14 +6,13 @@ import pandas as pd
 
 def rmse(observed, predicted):
     # Check for empty inputs
-    if len(observed) == 0 or len(predicted) == 0:
-        raise ValueError("Inputs cannot be empty")
+    if isinstance(observed, (list, tuple, np.ndarray, pd.Series)) and isinstance(predicted, (list, tuple, np.ndarray, pd.Series)):
+        if len(observed) == 0 or len(predicted) == 0:
+            raise ValueError("Inputs cannot be empty")
     
     # Check if observed and predicted have the same size
-    if len(observed) != len(predicted):
-        raise ValueError('Inputs must be the same size')
-
-    if isinstance(observed, (list, tuple, np.ndarray, pd.Series)) and isinstance(predicted, (list, tuple, np.ndarray, pd.Series)):
+        if len(observed) != len(predicted):
+            raise ValueError('Inputs must be the same size')
         # Convert inputs to NumPy arrays
         observed = np.array(observed)
         predicted = np.array(predicted)
