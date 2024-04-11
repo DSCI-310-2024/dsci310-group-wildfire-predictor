@@ -128,23 +128,45 @@ The data was spatially averaged to the following seven regions in Australia:
 - Victoria (Vl)     
 - Western Australia (WA)    
 
-![Histogram of Fire Area](../src/figures/histogram_fire_area.png){#fig-fire-area-hist width=80%}
+::: {layout-ncol=2 layout-valign="bottom"}
+![Histogram of Fire Area](../src/figures/histogram.png){#fig-fire-area-hist}
 
-![Barplot of Fires by Region](../src/figures/barplot_fires_by_region.png){#fig-fire-region-bar width=80%}
+![Fires by Region](../src/figures/barplot.png){#fig-fire-region-bar}
+:::
+
+@fig-fire-area-hist shows the distribution of fires by the magnitude of the area affected, in kilometres 
+squared. The mean fire size is 157.30km2, while the median is 48.58km2. Predictably, the frequency of fires 
+decreased as their size increased. A few outlying cases with very high fire area can be observed. The 
+distribution of fires across regions is shown in @fig-fire-region-bar, which indicates that Western Australia 
+experiences the most fires, while Tasmania has the least. Two general groups can be observed: regions with 
+increased fire prevalence (Western Australia, Queensland, Northern Territory, & New South Wales), and regions 
+with significantly lower fire prevalence (Victoria, South Australia, & Tasmania).
+
+![Fire Area vs. Mean Brightness](../src/figures/scatterplot.png){#fig-scatterplot width=60%}
+
+![Fire Area by Region Over Time](../src/figures/lineplot.png){#fig-lineplot-time width=60%}
+
+A scatterplot illustrating the area consumed by a single fire compared to fire brightness is shown in @fig-scatterplot. 
+Points appear to be fairly normally distributed about the mean of `Mean_Brightness`, although the outlying points result 
+in high kurtosis. This visualization shows that the majority of outlier points noted in @fig-fire-area-hist occurred 
+in Western Australia. @fig-lineplot-time is a lineplot displaying the area consumed by fires each year in km2 by region. 
+Despite our previous observation from @fig-fire-region-bar that a notable number of fires have occurred in New South 
+Wales, @fig-lineplot-time indicates that the magnitude of the fires occurring in this region is not comparatively 
+significant; i.e., there may be lots of fires, but they generally seem to be small fires that consume less area. This 
+indicates that fire frequency alone is an insufficient predictor of fire severity.
 
 ## Analysis
 
-A linear regression model was trained to predict the intensity of forest fires in Australia, measured 
-by estimated total fire area (the column `estimated_fire_area`), using the variables `Count`, 
-`Mean_confidence`, `Mean_estimated_fire_brightness`, and `Mean_estimated_fire_radiative_power`. 
-We opted to use a linear regression model due to its interpretability and the continuous nature of our 
-target variable. Prior to fitting the model, the numeric variables were isolated and standardized so 
-that the coefficients we obtained would not be influenced by scale differences in the variables. Only 
-four of the eight potential predictor variables were used to train the model: non-numeric variables were 
-eliminated, and then a correlation analysis was performed to identify which features present in the 
-remaining data would be good predictors of the target variable. 
+A linear regression model was trained to predict the intensity of forest fires in Australia, measured by 
+estimated total fire area (the column `Fire_area`), using the variables `Count`, `Mean_conf`, `Mean_brightness`, 
+and `Mean_rad_pwr`. We opted to use a linear regression model due to its interpretability and the continuous nature 
+of our target variable. Prior to fitting the model, the numeric variables were isolated and standardized so that the 
+coefficients we obtained would not be influenced by scale differences in the variables. Only four of the eight potential 
+predictor variables were used to train the model: non-numeric variables were eliminated, and then a correlation analysis 
+(see @fig-corr-matrix) was performed to identify which features present in the remaining data would be good predictors of 
+the target variable. 
 
-![Correlation Matrix](../src/figures/correlation_matrix.png){#fig-corr-matrix width=80%}
+![Correlation Matrix](../src/figures/corr-matrix.png){#fig-corr-matrix fig-align="left" width=80%}
 
 The data was divided into training and test sets using an 80/20 split. The model was first trained on 
 the training data, and then used to make predictions on the test set. This analysis was performed 
@@ -154,27 +176,51 @@ zipfile [@zipfile], numpy [@harris2020], Pandas [@pandas], matplotlib [@hunter20
 
 # Results & Discussion
 
-Good model fit was indicated by the evaluation metrics we selected, RMSE (72.95) and R-squared (0.9476). 
-A strong positive linear relationship between the target variable and the predictors `Count` and 
-`Mean_estimated_fire_radiative_power` can be observed in the line and residual plots accompanying the 
-analysis. The predictors `Mean_estimated_fire_brightness` and `Mean_confidence` have negative coefficients, 
-indicating a decrease in the value of these features precipitates an increase in the value of the target 
-variable `estimated_fire_area`.
+| Feature        | Coefficient         |
+|----------------|---------------------|
+| Count          | 2.0118368987260795  |
+| Mean_conf      | -1.5121774092534443 |
+| Mean_brightness| -1.5731199370335    |
+| Mean_rad_pwr   | 0.4878341063053981  |
 
-```{python}
-pd.read_csv("../src/figures/coefficients.csv")
-```
+: Model Coefficients {#tbl-mod-coefs}
+
+@tbl-mod-coefs presents the coefficients obtained from our model. A strong positive association is indicated 
+between `Count` and `Fire_area`, while a moderate positive association is implied between `Mean_rad_pwr` and 
+`Fire_area`. This suggests larger predicted fire areas correspond to both an increase in the number of fires 
+and higher radiative power. Conversely, negative associations are evident between `Fire_area` and `Mean_conf`
+(mean confidence) and `Mean_brightness`, indicating that increased confidence in fire detection and greater 
+brightness of detected fires are associated with smaller predicted fire areas. This implies that fires with 
+traits that make them more detectable tend to affect smaller geographic areas.
+
+| Metric    | Value  |
+|--------   |--------|
+| RMSE      | 72.9543|
+| R-squared | 0.9476 |
+
+: Model Evaluation Metrics {#tbl-metrics}
+
+We chose to evaluate our model using Root Mean Squared Error (RMSE), which measures the difference between the 
+actual observed values and the values predicted by a model, and R-squared, which indicates the proportion of 
+variance in the target variable that is explained by a model's predictors. The evaluation metrics generated for
+our model can be seen in @tbl-metrics. Good model fit was indicated by the scores obtained for the seleced model
+metrics: an RMSE of 72.95 and  R-squared of 0.9476, respectively.
 
 ::: {layout-ncol=2}
-![Residual Plot](../src/figures/residual_plot.png){#fig-resid-plot}
+![Residual Plot](../src/figures/lineplot-pred.png){#fig-pred-plot}
 
-![Line Plot](../src/figures/line_plot.png){#fig-line-plot}
+![Line Plot](../src/figures/lineplot-resid.png){#fig-resid-plot}
 :::
 
+A strong positive linear relationship between the target variable and the predictors `Count` and `Mean_rad_pwr` 
+can be observed in @fig-pred-plot and @fig-resid-plot, the line and residual plots accompanying the analysis. 
+The predictors `Mean_brightness` and `Mean_conf` have negative coefficients, indicating a decrease in the value 
+of these features precipitates an increase in the value of the target variable `Fire_area`.
+
 The findings are consistent with our expectations, as regions with greater radiative power correlate with 
-larger wildfire areas. However, the negative coefficient for `Mean_estimated_fire_brightness` and 
-`Mean_confidence` suggests an inverse relationship, implying that lower brightness and confidence intervals 
-are associated with larger fire areas.
+larger wildfire areas. However, the negative coefficient for `Mean_brightness` and `Mean_conf` suggests an 
+inverse relationship, implying that lower brightness and confidence intervals are associated with larger 
+fire areas.
 
 The prediction model may have significant implications for wildfire management and prediction, aiding in the 
 early detection and estimation of wildfire occurrences. This method can assist wildlife management services 
