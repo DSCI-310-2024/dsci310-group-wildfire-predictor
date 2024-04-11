@@ -17,7 +17,7 @@ RUN conda install -y \
     wheel=0.42.0 \ 
     matplotlib=3.8.3 \ 
     seaborn=0.13.2 \ 
-    scikit-learn=1.4.1.post1 \ 
-    make 
+    scikit-learn=1.4.1.post1 \
+    make=3.81
 
 RUN pip install click pytest
