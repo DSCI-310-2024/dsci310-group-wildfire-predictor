@@ -5,6 +5,19 @@ import numpy as np
 import pandas as pd
 
 def rmse(observed, predicted):
+    '''
+    Calculate the Root Mean Squared Error (RMSE) between observed and predicted values.
+
+    Parameters:
+    ----------
+    observed: Array-like observed values.
+    predicted: Array-like predicted values.
+
+    Returns:
+    -------
+    float: The RMSE between observed and predicted values.
+
+    '''
     # Check for empty inputs
     if isinstance(observed, (list, tuple, np.ndarray, pd.Series)) and isinstance(predicted, (list, tuple, np.ndarray, pd.Series)):
         if len(observed) == 0 or len(predicted) == 0:

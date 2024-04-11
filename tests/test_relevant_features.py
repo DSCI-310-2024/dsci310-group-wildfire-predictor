@@ -22,6 +22,13 @@ def test_target_variable_not_found():
     target_variable = 'Nonexistent_variable'
     assert relevant_features(correlation_matrix, target_variable) is None
 
+# Test that returned features remove the target variable from the set
+def test_removes_target_variable():
+    correlation_matrix = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'target': [7, 8, 9]})
+    target_variable = 'target'
+    returned_features = relevant_features(correlation_matrix, target_variable)
+    assert target_variable not in returned_features
+
 # Run tests
 if __name__ == "__main__":
     pytest.main()
