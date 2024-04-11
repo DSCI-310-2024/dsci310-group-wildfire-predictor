@@ -18,6 +18,6 @@ RUN conda install -y \
     matplotlib=3.8.3 \ 
     seaborn=0.13.2 \ 
     scikit-learn=1.4.1.post1 \
-    make=3.81
+    make=3.4
 
 RUN pip install click pytest
