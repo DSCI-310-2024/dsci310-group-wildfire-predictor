@@ -13,7 +13,6 @@ dependencies:
   - numpy=1.26.4
   - pandas=2.2.1
   - pip=24.0
-  - python.app
   - python=3.11.8
   - requests=2.31.0
   - setuptools=69.1.1
