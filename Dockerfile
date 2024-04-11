@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/minimal-notebook
+FROM quay.io/jupyter/scipy-notebook:2024-02-24
 
 RUN conda install -y \ 
     python=3.11.8 \ 
@@ -20,4 +20,4 @@ RUN conda install -y \
     scikit-learn=1.4.1.post1 \ 
     make 
 
-RUN pip install click
+RUN pip install click pytest
