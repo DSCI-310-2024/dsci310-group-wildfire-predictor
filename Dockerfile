@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/minimal-notebook
+FROM quay.io/jupyter/scipy-notebook:2024-02-24
 
 RUN conda install -y \ 
     python=3.11.8 \ 
@@ -17,7 +17,7 @@ RUN conda install -y \
     wheel=0.42.0 \ 
     matplotlib=3.8.3 \ 
     seaborn=0.13.2 \ 
-    scikit-learn=1.4.1.post1 \ 
-    make 
+    scikit-learn=1.4.1.post1 \
+    make=4.3
 
-RUN pip install click
+RUN pip install click pytest
