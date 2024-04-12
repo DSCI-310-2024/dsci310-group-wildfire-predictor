@@ -20,7 +20,9 @@ dependencies:
   - matplotlib=3.8.3
   - seaborn=0.13.2
   - scikit-learn=1.4.1.post1
+  - responses=0.25.0
   - pip:
     - click
     - pytest
+    - https://github.com/DSCI-310-2024/pywildfire=0.1.0
 prefix: /Applications/miniconda3/envs/forestFireEnv
