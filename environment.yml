@@ -23,4 +23,5 @@ dependencies:
   - pip:
     - click
     - pytest
+    - pywildfire=0.1.0
 prefix: /Applications/miniconda3/envs/forestFireEnv

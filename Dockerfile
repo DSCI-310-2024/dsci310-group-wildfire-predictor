@@ -20,4 +20,6 @@ RUN conda install -y \
     scikit-learn=1.4.1.post1 \
     make=4.3
 
-RUN pip install click pytest
+RUN pip install click \
+    pytest \
+    pywildfire==0.1.0
