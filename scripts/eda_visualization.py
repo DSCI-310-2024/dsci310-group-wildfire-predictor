@@ -16,6 +16,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)\
 
 from src.scale_data import scale_numeric_df
+from pywildfire.pyfeats import relevant_features
 
 @click.command()
 @click.option('--preprocessed-data', type=str, help='Path to the processed data file')
@@ -92,7 +93,7 @@ def main(preprocessed_data, plot_to):
 
     # Relevant features based off of correlation matrix
     target_variable = 'Estimated_fire_area'
-    relevant_features = correlation_matrix[target_variable].sort_values(ascending=False)[1:]
+    relevant_features = relevant_features(correlation_matrix, target_variable)
     print("Relevant features based on correlation with Estimated_fire_area:")
     print(relevant_features)
 

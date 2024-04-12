@@ -17,10 +17,11 @@ RUN conda install -y \
     wheel=0.42.0 \ 
     matplotlib=3.8.3 \ 
     seaborn=0.13.2 \ 
-    scikit-learn=1.4.1.post1 \
-    make=4.3 \
+    scikit-learn=1.4.1.post1 \ 
+    make=4.3 \ 
     responses=0.25.0
 
 RUN pip install click \
     pytest \
     git+https://github.com/DSCI-310-2024/pywildfire.git@0.1.0
+
