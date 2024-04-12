@@ -4,7 +4,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - .:/home/wildfire
+      - .:/home/jovyan/wildfire
     deploy:
       resources:
         limits:
