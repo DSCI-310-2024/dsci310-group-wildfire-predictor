@@ -21,6 +21,7 @@ RUN conda install -y \
     make=4.3 \ 
     responses=0.25.0
 
-RUN pip install click \ 
-    pytest \ 
-    https://github.com/DSCI-310-2024/pywildfire=0.1.0
+RUN pip install click \
+    pytest \
+    git+https://github.com/DSCI-310-2024/pywildfire.git
+
