@@ -210,7 +210,7 @@ Figure&nbsp;4: Fire Area by Region Over Time
 <div id="fig-corr-matrix" class="quarto-figure quarto-figure-left quarto-float anchored" data-fig-align="left">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../src/figures/corr-matrix.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:80.0%">
+<img src="../src/figures/corr_matrix.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Correlation Matrix
@@ -222,68 +222,84 @@ Figure&nbsp;5: Correlation Matrix
 </section>
 <section id="results-discussion" class="level1">
 <h1>Results &amp; Discussion</h1>
-<div id="tbl-mod-coefs" class="quarto-float anchored">
+<div class="cell" data-execution_count="2">
+<div id="tbl-mod-coefs" class="cell quarto-float anchored" data-execution_count="2">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mod-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1: Model Coefficients
 </figcaption>
 <div aria-describedby="tbl-mod-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table">
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th>Feature</th>
-<th>Coefficient</th>
+<th style="text-align: right;"></th>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: right;">Coefficient</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Count</td>
-<td>2.0118368987260795</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Count</td>
+<td style="text-align: right;">2.01184</td>
 </tr>
 <tr class="even">
-<td>Mean_conf</td>
-<td>-1.5121774092534443</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Mean_confidence</td>
+<td style="text-align: right;">-1.51218</td>
 </tr>
 <tr class="odd">
-<td>Mean_brightness</td>
-<td>-1.5731199370335</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Mean_estimated_fire_brightness</td>
+<td style="text-align: right;">-1.57312</td>
 </tr>
 <tr class="even">
-<td>Mean_rad_pwr</td>
-<td>0.4878341063053981</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Mean_estimated_fire_radiative_power</td>
+<td style="text-align: right;">0.487834</td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
 </figure>
 </div>
+</div>
 <p><a href="#tbl-mod-coefs" class="quarto-xref">Table&nbsp;1</a> presents the coefficients obtained from our model. A strong positive association is indicated between <code>Count</code> and <code>Fire_area</code>, while a moderate positive association is implied between <code>Mean_rad_pwr</code> and <code>Fire_area</code>. This suggests larger predicted fire areas correspond to both an increase in the number of fires and higher radiative power. Conversely, negative associations are evident between <code>Fire_area</code> and <code>Mean_conf</code> (mean confidence) and <code>Mean_brightness</code>, indicating that increased confidence in fire detection and greater brightness of detected fires are associated with smaller predicted fire areas. This implies that fires with traits that make them more detectable tend to affect smaller geographic areas.</p>
-<div id="tbl-metrics" class="quarto-float anchored">
+<div class="cell" data-execution_count="3">
+<div id="tbl-metrics" class="cell quarto-float anchored" data-execution_count="3">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2: Model Evaluation Metrics
 </figcaption>
 <div aria-describedby="tbl-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table">
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th>Metric</th>
-<th>Value</th>
+<th style="text-align: right;"></th>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>RMSE</td>
-<td>72.9543</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">RMSE</td>
+<td style="text-align: right;">72.9543</td>
 </tr>
 <tr class="even">
-<td>R-squared</td>
-<td>0.9476</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">R-squared score</td>
+<td style="text-align: right;">0.947599</td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
 </figure>
+</div>
 </div>
 <p>We chose to evaluate our model using Root Mean Squared Error (RMSE), which measures the difference between the actual observed values and the values predicted by a model, and R-squared, which indicates the proportion of variance in the target variable that is explained by a model’s predictors. The evaluation metrics generated for our model can be seen in <a href="#tbl-metrics" class="quarto-xref">Table&nbsp;2</a>. Good model fit was indicated by the scores obtained for the seleced model metrics: an RMSE of 72.95 and R-squared of 0.9476, respectively.</p>
 <div>
