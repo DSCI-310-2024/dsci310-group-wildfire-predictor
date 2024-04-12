@@ -43,5 +43,9 @@ def main(raw_data, data_to):
     df_clean = df.dropna()  
     df_clean.info()
 
+    # Save data to specified location
+    df_clean.to_csv(data_to, index = False)
+    print("Preprocessed data saved to:", data_to)
+
 if __name__ == '__main__':
     main()

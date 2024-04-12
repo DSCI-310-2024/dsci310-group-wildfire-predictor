@@ -52,6 +52,15 @@ def main(preprocessed_data, results_to):
     r_squared = model.score(X_test, y_test)
     print("R-squared score:", r_squared)
 
+    # Display metrics in a dataframe
+    rmse_df = pd.DataFrame({'Metric': ['RMSE'], 'Value': [rmse_value]})
+    r_squared_df = pd.DataFrame({'Metric': ['R-squared score'], 'Value': [r_squared]})
+    metrics_df = pd.concat([rmse_df, r_squared_df], ignore_index=True)
+    print(metrics_df)
+
+    # Save metrics table
+    metrics_df.to_csv(os.path.join(results_to, 'model_metrics.csv'), index=False)
+
     # Model coefficients
     coefficients = model.coef_
 
@@ -61,33 +70,25 @@ def main(preprocessed_data, results_to):
 
     # Save coefficients table
     coefficients_df.to_csv(os.path.join(results_to, 'coefficients.csv'), index=False)
-
-    # Plot predicted vs. actual values
-    plt.figure(figsize=(8, 6))
-    plt.scatter(y_test, y_pred)
-    plt.xlabel('Actual Fire Area')
-    plt.ylabel('Predicted Fire Area')
-    plt.title('Predicted vs. Actual Fire Area')
-    plt.savefig(os.path.join(results_to, 'predicted_vs_actual.png'))
     
     # Line plot for regression model 
     plt.figure(figsize=(6, 4))
-    plt.plot(y_test, y_pred, 'o', color='orangered', alpha=0.5)
+    plt.plot(y_test, y_pred, 'o', color='#8CBCD9', alpha=0.5)
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], '--', color='black', lw=2)
     plt.xlabel('Actual')
     plt.ylabel('Predicted')
     plt.title('Line Plot on Predicting Wildfire Intensity')
-    plt.savefig(os.path.join(results_to, 'line_plot.png'))
+    plt.savefig(os.path.join(results_to, 'lineplot-pred.png'))
 
     # Residual plot for regression model
     residuals = y_test - y_pred
     plt.figure(figsize=(6, 4))
-    plt.scatter(y_pred, residuals, color='orangered', alpha=0.5)
+    plt.scatter(y_pred, residuals, color='#8CBCD9', alpha=0.5)
     plt.axhline(y=0, color='black', linestyle='--', lw=2)
     plt.xlabel('Predicted')
     plt.ylabel('Residuals')
     plt.title('Residual Plot on Predicting Wildfire Intensity')
-    plt.savefig(os.path.join(results_to, 'residual_plot.png'))
+    plt.savefig(os.path.join(results_to, 'lineplot-resid.png'))
 
     click.echo("Modeling results saved.")
 
