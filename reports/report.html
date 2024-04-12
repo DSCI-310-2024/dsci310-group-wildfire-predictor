@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.543">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Pahul Brar, Fiona Chang, Lillian Milroy, &amp; Darwin Zhang">
+
+<title>Predicting Wildfire Intensity From Historical Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="report_files/libs/quarto-html/quarto.js"></script>
+<script src="report_files/libs/quarto-html/popper.min.js"></script>
+<script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="report_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="report_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  </ul></li>
+  <li><a href="#results-discussion" id="toc-results-discussion" class="nav-link" data-scroll-target="#results-discussion">Results &amp; Discussion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="report.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting Wildfire Intensity From Historical Data</h1>
+<p class="subtitle lead">Group 15</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Pahul Brar, Fiona Chang, Lillian Milroy, &amp; Darwin Zhang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>This study employing a linear regression model to predict wildfire intensity in Australian regions aims to draw parallels with British Columbia’s escalating wildfire risk due to climate-related weather. Using a dataset encompassing fire-related variables since 2005, including fire area, brightness, and radiative power, the analysis reveals a strong positive correlation between fire area and mean radiative power. The model demonstrates good fit and offers potential applications in wildfire management and prediction.</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>British Columbia is well-known for having a moderate climate associated with its beautiful, temperate rainforests; but in recent years, climate-related weather extremes in the region have caused a significant increase in forest fires <span class="citation" data-cites="dellaSala2011 parisien2023">(<a href="#ref-dellaSala2011" role="doc-biblioref">DellaSala 2011</a>; <a href="#ref-parisien2023" role="doc-biblioref">Parisien 2023</a>)</span>. The rapid onset of the problem, in conjunction with its unprecedented magnitude, has left British Columbians vulnerable as provincial authorities struggle to develop infrastructure capable of addressing the frequency and severity of the fires <span class="citation" data-cites="parisien2023">(<a href="#ref-parisien2023" role="doc-biblioref">Parisien 2023</a>)</span>. While inland residents face a heightened risk of losing their lives, homes, and loved ones to wildfires, the resulting smoke influences air quality throughout the province, posing profound health risks <span class="citation" data-cites="cascio2018">(<a href="#ref-cascio2018" role="doc-biblioref">Cascio 2018</a>)</span>.</p>
+<p>While rates of climate-related fire events are projected to increase globally, due to the composition of its ecological landscape, Australia is a nation that is well accustomed to battling wildfires <span class="citation" data-cites="jones2022 bowman2018">(<a href="#ref-jones2022" role="doc-biblioref">Jones 2022</a>; <a href="#ref-bowman2018" role="doc-biblioref">Bowman 2018</a>)</span>. There is notable overlap between the terrestrial biomes present in both Australia and B.C., particularly in the unique temperate coastal regions steeped with flammable vegetation, and the semi-arid inland deserts <span class="citation" data-cites="dickman2018 bowman2018">(<a href="#ref-dickman2018" role="doc-biblioref">Dickman 2018</a>; <a href="#ref-bowman2018" role="doc-biblioref">Bowman 2018</a>)</span>. Given its proximity to the equator, Australia’s North coast exhibits fewer similarities to B.C <span class="citation" data-cites="dickman2018 dellaSala2011">(<a href="#ref-dickman2018" role="doc-biblioref">Dickman 2018</a>; <a href="#ref-dellaSala2011" role="doc-biblioref">DellaSala 2011</a>)</span>. However, a shift in the B.C. climate precipitated by rising temperatures is occurring; some of the drier inland areas are beginning to mimic the ecological conditions found on Australia’s North coast.</p>
+<p>Here, we attempt to predict the intensity of wildfires in regions across Australia that exhibit ecological similarities to B.C. in the hopes that the model can be adapted for provincial use. The four highest temperatures over the last century in B.C. have all been recorded within the last seven years; the swiftness with which the local climate is changing has caused a scarcity of regional data to anticipate the state of future wildfire seasons <span class="citation" data-cites="parisien2023">(<a href="#ref-parisien2023" role="doc-biblioref">Parisien 2023</a>)</span>. We will be using a <a href="https://github.com/Call-for-Code/Spot-Challenge-Wildfires/raw/main/data/Nov_10.zip">dataset</a> processed by IBM containing information collected via thermal imaging technology since 2005, which captures a number of variables such as region, daily sum of estimated fire area, brightness, and radiative power <span class="citation" data-cites="hamann2021 krook2021">(<a href="#ref-hamann2021" role="doc-biblioref">Hamann 2021</a>; <a href="#ref-krook2021" role="doc-biblioref">Krook 2021</a>)</span>. For the purposes of this analysis, fire intensity will be represented by estimated daily regional area affected by fire. The rarity of the terrestrial biomes shared by both regions, coupled with Australia’s experience in wildfire management, present B.C. with an unlikely learning opportunity: it is possible that the wealth of historical data on Australian wildfires could be used to help B.C. predict forest fire intensity <span class="citation" data-cites="bowman2018 dellaSala2011">(<a href="#ref-bowman2018" role="doc-biblioref">Bowman 2018</a>; <a href="#ref-dellaSala2011" role="doc-biblioref">DellaSala 2011</a>)</span>. A sentiment that has been shared among Canadian researchers is that the abilities of machine learning tools are not taken advantage of by the Canadian Wildland Fire Information System <span class="citation" data-cites="purcell2023">(<a href="#ref-purcell2023" role="doc-biblioref">Purcell 2023</a>)</span>. Current wildfire research efforts should be supplemented by modern technological methods; hopefully, they can be used to preempt the trajectory of wildfire prevalence, and make life-saving modifications to infrastructure.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>Our dataset contains information about wildfires throughout seven geographic regions in Australia, starting from the year 2005. It can be located in its entirety <a href="https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main">on GitHub</a>, and <a href="https://github.com/Call-for-Code/Spot-Challenge-Wildfires/blob/main/data/misc/NSW_Wildfires_Temperature.csv">this</a> is the specific csv containing the data used for our analysis <span class="citation" data-cites="hamann2021 krook2021">(<a href="#ref-hamann2021" role="doc-biblioref">Hamann 2021</a>; <a href="#ref-krook2021" role="doc-biblioref">Krook 2021</a>)</span>.</p>
+<p>There are 26,404 rows and 9 columns. Definitions for each variable, obtained from the <a href="https://github.com/Call-for-Code/Spot-Challenge-Wildfires/blob/main/data/Readme_Docs_Wildfires-Datasets_2020-11.pdf">original data documentation</a>, are provided below.</p>
+<ul>
+<li><code>Region</code>: The respective regions as outlined above for which the data was/is aggregated.</li>
+<li><code>Date</code> Day of acquisition of the data. All dates are in UTC and provide the data for 24 hours ahead.</li>
+<li><code>Estimated_fire_area</code>: Daily sum of estimated fire area for presumed vegetation fires with a confidence level of larger than 75% for a given region. To obtain this estimated area the scan pixel size was multiplied by the along track pixel size. The nominal unit for the area is in kmA<sup>2</sup>.</li>
+<li><code>Mean_estimated_fire_brightness</code>: Daily mean (by flagged fire pixels(=count)) of estimated fire brightness for presumed vegetation fires with a confidence level of larger than 75% for a given region. The data was obtained by averaging the means of both the brightness temperature 21 (obtained from channel 21/22) and brightness temperature 31 (obtained from channel 31). The units are in Kelvin.</li>
+<li><code>Mean_estimated_fire_radiative_power</code>: Daily mean (by flagged fire pixels(=count)) of estimated radiative power for presumed vegetation fires with a confidence level of larger than 75% for a given region. The units are in megawatts.</li>
+<li><code>Mean_confidence</code>: Daily mean of confidence for presumed vegetation fires with a confidence level of larger than 75% for a given region. This value is based on a collection of intermediate algorithm quantities used in the detection process. It is intended to help users gauge the quality of individual hotspot/fire pixels. Confidence estimates range between 0 and 100%.</li>
+<li><code>Std_confidence</code>: Standard deviation of estimated fire radiative power if available. The units are in megawatts.</li>
+<li><code>Var_confidence</code>: Variance of estimated fire radiative power if available. The units are in megawatts.</li>
+<li><code>Count</code>: Daily numbers of pixels for presumed vegetation fires with a confidence level of larger than 75% for a given region.</li>
+<li><code>Replaced</code>: Indicates with an “R” whether the data has been replaced with higher quality data when available (usually with a 2-3 month lag). Replaced data has slightly higher quality but it is expected to be of very minor impact in this contest. Please note that most corrections in the replaced data are associated with the precise geolocation and the fire classification. Most notably there is no classification for the type of fire, which means that all fires are assumed to be vegetation fires. Comparing the data from 2005 to 2020 more than 98% of the fires were eventually classified to be presumed vegetation fires.</li>
+</ul>
+<p>The data was spatially averaged to the following seven regions in Australia:</p>
+<ul>
+<li>New South Wales (NSW)<br>
+</li>
+<li>Northern Territory (NT)<br>
+</li>
+<li>Queensland (QL)<br>
+</li>
+<li>South Australia (SA)<br>
+</li>
+<li>Tasmania (TA)<br>
+</li>
+<li>Victoria (Vl)<br>
+</li>
+<li>Western Australia (WA)</li>
+</ul>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row quarto-layout-valign-bottom">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-fire-area-hist" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fire-area-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/histogram.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fire-area-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Histogram of Fire Area
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-fire-region-bar" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fire-region-bar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/barplot.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fire-region-bar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Fires by Region
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><a href="#fig-fire-area-hist" class="quarto-xref">Figure&nbsp;1</a> shows the distribution of fires by the magnitude of the area affected, in kilometres squared. The mean fire size is 157.30km2, while the median is 48.58km2. Predictably, the frequency of fires decreased as their size increased. A few outlying cases with very high fire area can be observed. The distribution of fires across regions is shown in <a href="#fig-fire-region-bar" class="quarto-xref">Figure&nbsp;2</a>, which indicates that Western Australia experiences the most fires, while Tasmania has the least. Two general groups can be observed: regions with increased fire prevalence (Western Australia, Queensland, Northern Territory, &amp; New South Wales), and regions with significantly lower fire prevalence (Victoria, South Australia, &amp; Tasmania).</p>
+<div id="fig-scatterplot" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scatterplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/scatterplot.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scatterplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Fire Area vs.&nbsp;Mean Brightness
+</figcaption>
+</figure>
+</div>
+<div id="fig-lineplot-time" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lineplot-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/lineplot.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lineplot-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Fire Area by Region Over Time
+</figcaption>
+</figure>
+</div>
+<p>A scatterplot illustrating the area consumed by a single fire compared to fire brightness is shown in <a href="#fig-scatterplot" class="quarto-xref">Figure&nbsp;3</a>. Points appear to be fairly normally distributed about the mean of <code>Mean_Brightness</code>, although the outlying points result in high kurtosis. This visualization shows that the majority of outlier points noted in <a href="#fig-fire-area-hist" class="quarto-xref">Figure&nbsp;1</a> occurred in Western Australia. <a href="#fig-lineplot-time" class="quarto-xref">Figure&nbsp;4</a> is a lineplot displaying the area consumed by fires each year in km2 by region. Despite our previous observation from <a href="#fig-fire-region-bar" class="quarto-xref">Figure&nbsp;2</a> that a notable number of fires have occurred in New South Wales, <a href="#fig-lineplot-time" class="quarto-xref">Figure&nbsp;4</a> indicates that the magnitude of the fires occurring in this region is not comparatively significant; i.e., there may be lots of fires, but they generally seem to be small fires that consume less area. This indicates that fire frequency alone is an insufficient predictor of fire severity.</p>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>A linear regression model was trained to predict the intensity of forest fires in Australia, measured by estimated total fire area (the column <code>Fire_area</code>), using the variables <code>Count</code>, <code>Mean_conf</code>, <code>Mean_brightness</code>, and <code>Mean_rad_pwr</code>. We opted to use a linear regression model due to its interpretability and the continuous nature of our target variable. Prior to fitting the model, the numeric variables were isolated and standardized so that the coefficients we obtained would not be influenced by scale differences in the variables. Only four of the eight potential predictor variables were used to train the model: non-numeric variables were eliminated, and then a correlation analysis (see <a href="#fig-corr-matrix" class="quarto-xref">Figure&nbsp;5</a>) was performed to identify which features present in the remaining data would be good predictors of the target variable.</p>
+<div id="fig-corr-matrix" class="quarto-figure quarto-figure-left quarto-float anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/corr_matrix.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Correlation Matrix
+</figcaption>
+</figure>
+</div>
+<p>The data was divided into training and test sets using an 80/20 split. The model was first trained on the training data, and then used to make predictions on the test set. This analysis was performed using the Python Programming Language <span class="citation" data-cites="Python">(<a href="#ref-Python" role="doc-biblioref">Van Rossum and Drake 2009</a>)</span> and the following Python packages: requests <span class="citation" data-cites="requests">(<a href="#ref-requests" role="doc-biblioref">Reitz 2011</a>)</span>, zipfile <span class="citation" data-cites="zipfile">(<a href="#ref-zipfile" role="doc-biblioref"><em>Ziplfile – Work with ZIP Archives</em> 2022</a>)</span>, numpy <span class="citation" data-cites="harris2020">(<a href="#ref-harris2020" role="doc-biblioref">Harris 2020</a>)</span>, Pandas <span class="citation" data-cites="pandas">(<a href="#ref-pandas" role="doc-biblioref">McKinney 2010</a>)</span>, matplotlib <span class="citation" data-cites="hunter2007">(<a href="#ref-hunter2007" role="doc-biblioref">Hunter 2007</a>)</span>, scikit-learn <span class="citation" data-cites="scikitlearn">(<a href="#ref-scikitlearn" role="doc-biblioref">Pedregosa 2011</a>)</span>, and seaborn <span class="citation" data-cites="seaborn">(<a href="#ref-seaborn" role="doc-biblioref">Waskom 2021</a>)</span>.</p>
+</section>
+</section>
+<section id="results-discussion" class="level1">
+<h1>Results &amp; Discussion</h1>
+<div class="cell" data-execution_count="2">
+<div id="tbl-mod-coefs" class="cell quarto-float anchored" data-execution_count="2">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mod-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Model Coefficients
+</figcaption>
+<div aria-describedby="tbl-mod-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: right;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Count</td>
+<td style="text-align: right;">2.01184</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Mean_confidence</td>
+<td style="text-align: right;">-1.51218</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Mean_estimated_fire_brightness</td>
+<td style="text-align: right;">-1.57312</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Mean_estimated_fire_radiative_power</td>
+<td style="text-align: right;">0.487834</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-mod-coefs" class="quarto-xref">Table&nbsp;1</a> presents the coefficients obtained from our model. A strong positive association is indicated between <code>Count</code> and <code>Fire_area</code>, while a moderate positive association is implied between <code>Mean_rad_pwr</code> and <code>Fire_area</code>. This suggests larger predicted fire areas correspond to both an increase in the number of fires and higher radiative power. Conversely, negative associations are evident between <code>Fire_area</code> and <code>Mean_conf</code> (mean confidence) and <code>Mean_brightness</code>, indicating that increased confidence in fire detection and greater brightness of detected fires are associated with smaller predicted fire areas. This implies that fires with traits that make them more detectable tend to affect smaller geographic areas.</p>
+<div class="cell" data-execution_count="3">
+<div id="tbl-metrics" class="cell quarto-float anchored" data-execution_count="3">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Model Evaluation Metrics
+</figcaption>
+<div aria-describedby="tbl-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">RMSE</td>
+<td style="text-align: right;">72.9543</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">R-squared score</td>
+<td style="text-align: right;">0.947599</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>We chose to evaluate our model using Root Mean Squared Error (RMSE), which measures the difference between the actual observed values and the values predicted by a model, and R-squared, which indicates the proportion of variance in the target variable that is explained by a model’s predictors. The evaluation metrics generated for our model can be seen in <a href="#tbl-metrics" class="quarto-xref">Table&nbsp;2</a>. Good model fit was indicated by the scores obtained for the seleced model metrics: an RMSE of 72.95 and R-squared of 0.9476, respectively.</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pred-plot" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pred-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/lineplot-pred.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pred-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Residual Plot
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-resid-plot" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../src/figures/lineplot-resid.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Line Plot
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>A strong positive linear relationship between the target variable and the predictors <code>Count</code> and <code>Mean_rad_pwr</code> can be observed in <a href="#fig-pred-plot" class="quarto-xref">Figure&nbsp;6</a> and <a href="#fig-resid-plot" class="quarto-xref">Figure&nbsp;7</a>, the line and residual plots accompanying the analysis. The predictors <code>Mean_brightness</code> and <code>Mean_conf</code> have negative coefficients, indicating a decrease in the value of these features precipitates an increase in the value of the target variable <code>Fire_area</code>.</p>
+<p>The findings are consistent with our expectations, as regions with greater radiative power correlate with larger wildfire areas. However, the negative coefficient for <code>Mean_brightness</code> and <code>Mean_conf</code> suggests an inverse relationship, implying that lower brightness and confidence intervals are associated with larger fire areas.</p>
+<p>The prediction model may have significant implications for wildfire management and prediction, aiding in the early detection and estimation of wildfire occurrences. This method can assist wildlife management services and authorities in better understanding the nature of wildfires. Integration of this approach can also help reduce risks posed by wildfires to ecosystems, communities, and public health.</p>
+<p>For future iterations, it’s worth considering further exploration of the correlation between mean estimated fire brightness and confidence, as this unexpected relationship may offer insights into underlying factors. Additionally, exploring other variables such as area, land characteristics, dryness, or the presence of old growth could provide valuable insights into their influence on wildfire occurrence.</p>
+</section>
+<section id="references" class="level1 unnumbered">
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bowman2018" class="csl-entry" role="listitem">
+Bowman, Daniels, D. M. J. S. 2018. <span>“Can Air Quality Management Drive Sustainable Fuels Management at the Temperate Wildland–Urban Interface?”</span> <em>Fire</em> 1 (2): 27. https://doi.org/<a href="https://doi.org/10.3390/fire1020027">https://doi.org/10.3390/fire1020027</a>.
+</div>
+<div id="ref-cascio2018" class="csl-entry" role="listitem">
+Cascio, W. E. 2018. <span>“Wildland Fire Smoke and Human Health. Science of the Total Environment.”</span> <em>Fire</em> 624: 586–95. https://doi.org/<a href="https://doi.org/10.1016/j.scitotenv.2017.12.086">https://doi.org/10.1016/j.scitotenv.2017.12.086</a>.
+</div>
+<div id="ref-dellaSala2011" class="csl-entry" role="listitem">
+DellaSala, Alaback, D. A. 2011. <em>Just What Are Temperate and Boreal Rainforests?</em> Island Press/Center for Resource Economics eBooks. https://doi.org/<a href="https://doi.org/10.5822/978-1-61091-008-8_1">https://doi.org/10.5822/978-1-61091-008-8_1</a>.
+</div>
+<div id="ref-dickman2018" class="csl-entry" role="listitem">
+Dickman, C. R. 2018. <em>Biodiversity in Australia: An Overview: Selected Countries in the Americas and Australia</em>. <a href="https://doi.org/10.1201/9780429433634-12">https://doi.org/10.1201/9780429433634-12</a>.
+</div>
+<div id="ref-hamann2021" class="csl-entry" role="listitem">
+Hamann, &amp; Schmude, H. 2021. <span>“Predicting Wildfires with Weather Forecast Data.”</span> 2021. <a href="https://developer.ibm.com/data/spot-challenge-wildfires/">https://developer.ibm.com/data/spot-challenge-wildfires/</a>.
+</div>
+<div id="ref-harris2020" class="csl-entry" role="listitem">
+Harris, C. R. 2020. <span>“Array Programming with NumPy.”</span> <em>Nature</em> 585: 357–62. <a href="https://pubmed.ncbi.nlm.nih.gov/32939066/">https://pubmed.ncbi.nlm.nih.gov/32939066/</a>.
+</div>
+<div id="ref-hunter2007" class="csl-entry" role="listitem">
+Hunter, J. D. 2007. <span>“Matplotlib: A 2D Graphics Environment.”</span> <em>Computing in Science &amp; Engineering</em> 9 (3): 90–95.
+</div>
+<div id="ref-jones2022" class="csl-entry" role="listitem">
+Jones, Abatzoglou, M. W. 2022. <span>“Global and Regional Trends and Drivers of Fire Under Climate Change.”</span> <em>Reviews of Geophysics</em> 60 (3). <a href="https://doi.org/0.1029/2020rg000726">https://doi.org/0.1029/2020rg000726</a>.
+</div>
+<div id="ref-krook2021" class="csl-entry" role="listitem">
+Krook, D. 2021. <span>“Spot Challenge Wildfires.”</span> GitHub. 2021. <a href="https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main">https://github.com/Call-for-Code/Spot-Challenge-Wildfires/tree/main</a>.
+</div>
+<div id="ref-pandas" class="csl-entry" role="listitem">
+McKinney, Wes. 2010. <span>“Data Structures for Statistical Computing in Python.”</span> In <em>Proceedings of the 9th Python in Science Conference</em>, edited by Stéfan van der Walt and Jarrod Millman, =51–56.
+</div>
+<div id="ref-parisien2023" class="csl-entry" role="listitem">
+Parisien, Barber, M. 2023. <span>“Abrupt, Climate-Induced Increase in Wildfires in British Columbia Since the Mid-2000s.”</span> <em>Communications Earth &amp; Environment</em> 4 (1). <a href="https://doi.org/10.1038/s43247-023-00977-1">https://doi.org/10.1038/s43247-023-00977-1</a>.
+</div>
+<div id="ref-scikitlearn" class="csl-entry" role="listitem">
+Pedregosa, F. 2011. <span>“Scikit-Learn: Machine Learning in Python.”</span> <em>Journal of Machine Learning Research</em>, 2825–30.
+</div>
+<div id="ref-purcell2023" class="csl-entry" role="listitem">
+Purcell, R. 2023. <span>“Forest Fire Prediction Frameworks Using Federated Learning and Internet of Things (IoT).”</span> Master’s thesis, Dalhousie University. <a href="https://dalspace.library.dal.ca/bitstream/handle/10222/82847/RichardJPurcell2023.pdf?sequence=5&amp;isAllowed=y">https://dalspace.library.dal.ca/bitstream/handle/10222/82847/RichardJPurcell2023.pdf?sequence=5&amp;isAllowed=y</a>.
+</div>
+<div id="ref-requests" class="csl-entry" role="listitem">
+Reitz, K. 2011. <span>“Requests: HTTP for Humans.”</span> 2011. <a href="https://requests.readthedocs.io/en/master/">https://requests.readthedocs.io/en/master/</a>.
+</div>
+<div id="ref-Python" class="csl-entry" role="listitem">
+Van Rossum, Guido, and Fred L. Drake. 2009. <em>Python 3 Reference Manual</em>. Scotts Valley, CA: CreateSpace.
+</div>
+<div id="ref-seaborn" class="csl-entry" role="listitem">
+Waskom, M. L. 2021. <span>“Seaborn: Statistical Data Visualization.”</span> <em>Journal of Open Source Software</em> 6 (60): 3021. <a href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.
+</div>
+<div id="ref-zipfile" class="csl-entry" role="listitem">
+<em>Ziplfile – Work with ZIP Archives</em>. 2022. Python Software Foundation. <a href="https://docs.python.org/3/library/zipfile.html">https://docs.python.org/3/library/zipfile.html</a>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

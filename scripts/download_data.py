@@ -95,5 +95,6 @@ def get_csv(directory, csv_file):
         click.echo(f"Selected file '{csv_file}' not found in directory.")
         return None
 
+
 if __name__ == '__main__':
     main()
