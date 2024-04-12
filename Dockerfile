@@ -18,8 +18,9 @@ RUN conda install -y \
     matplotlib=3.8.3 \ 
     seaborn=0.13.2 \ 
     scikit-learn=1.4.1.post1 \
-    make=4.3
+    make=4.3 \
+    responses=0.25.0
 
 RUN pip install click \
     pytest \
-    pywildfire==0.1.0
+    https://github.com/DSCI-310-2024/pywildfire=0.1.0
