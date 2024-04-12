@@ -166,7 +166,7 @@ predictor variables were used to train the model: non-numeric variables were eli
 (see @fig-corr-matrix) was performed to identify which features present in the remaining data would be good predictors of 
 the target variable. 
 
-![Correlation Matrix](../src/figures/corr-matrix.png){#fig-corr-matrix fig-align="left" width=80%}
+![Correlation Matrix](../src/figures/corr_matrix.png){#fig-corr-matrix fig-align="left" width=80%}
 
 The data was divided into training and test sets using an 80/20 split. The model was first trained on 
 the training data, and then used to make predictions on the test set. This analysis was performed 
@@ -176,14 +176,16 @@ zipfile [@zipfile], numpy [@harris2020], Pandas [@pandas], matplotlib [@hunter20
 
 # Results & Discussion
 
-| Feature        | Coefficient         |
-|----------------|---------------------|
-| Count          | 2.0118368987260795  |
-| Mean_conf      | -1.5121774092534443 |
-| Mean_brightness| -1.5731199370335    |
-| Mean_rad_pwr   | 0.4878341063053981  |
+```{python}
+#| label: tbl-mod-coefs
+#| tbl-cap: "Model Coefficients"
 
-: Model Coefficients {#tbl-mod-coefs}
+from IPython.display import display, Markdown
+import pandas as pd
+
+df = pd.read_csv("../src/figures/coefficients.csv")
+display(Markdown(df.to_markdown()))
+```
 
 @tbl-mod-coefs presents the coefficients obtained from our model. A strong positive association is indicated 
 between `Count` and `Fire_area`, while a moderate positive association is implied between `Mean_rad_pwr` and 
@@ -193,12 +195,16 @@ and higher radiative power. Conversely, negative associations are evident betwee
 brightness of detected fires are associated with smaller predicted fire areas. This implies that fires with 
 traits that make them more detectable tend to affect smaller geographic areas.
 
-| Metric    | Value  |
-|--------   |--------|
-| RMSE      | 72.9543|
-| R-squared | 0.9476 |
+```{python}
+#| label: tbl-metrics
+#| tbl-cap: "Model Evaluation Metrics"
 
-: Model Evaluation Metrics {#tbl-metrics}
+from IPython.display import display, Markdown
+import pandas as pd
+
+df = pd.read_csv("../src/figures/model_metrics.csv")
+display(Markdown(df.to_markdown()))
+```
 
 We chose to evaluate our model using Root Mean Squared Error (RMSE), which measures the difference between the 
 actual observed values and the values predicted by a model, and R-squared, which indicates the proportion of 
