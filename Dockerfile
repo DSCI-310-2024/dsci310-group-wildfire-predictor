@@ -23,5 +23,5 @@ RUN conda install -y \
 
 RUN pip install click \
     pytest \
-    git+https://github.com/DSCI-310-2024/pywildfire.git@0.1.0
+    git+https://github.com/DSCI-310-2024/pywildfire.git
 
